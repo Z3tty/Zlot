@@ -11,7 +11,7 @@ from PyQt6.QtGui import QIcon, QPixmap, QPainter
 from PyQt6.QtCore import Qt
 import atexit
 import sys
-import random
+from numpy.random import choice
 
 TABLE_ITEM_WIDTH: int = 183
 TABLE_ITEM_HEIGHT: int = 150
@@ -137,7 +137,7 @@ class Window(QWidget):
         rolls: list = [["", "", ""], ["", "", ""], ["", "", ""]]
         for i in range(3):
             for j in range(3):
-                r: str = random.choice(self.slots)
+                r: str = str(choice(self.slots,  p=[0.4, 0.25, 0.15, 0.07, 0.05, 0.05, 0.03]))
                 rolls[i][j] = r
                 self.table.setImage(i, j, r)
         winnings: int = 0
