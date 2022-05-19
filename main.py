@@ -1,4 +1,3 @@
-from logging.handlers import SYSLOG_TCP_PORT
 from PyQt6.QtWidgets import (
     QApplication,
     QVBoxLayout,
