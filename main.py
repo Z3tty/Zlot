@@ -94,6 +94,9 @@ class Window(QWidget):
             self.table.setColumnWidth(_, TABLE_ITEM_WIDTH)
             self.table.setRowHeight(_, TABLE_ITEM_HEIGHT)
         layout.addWidget(self.table)
+        for i in range(3):
+            for j in range(3):
+                self.table.setImage(i, j, "gfx/question.png")
 
         self.label = QLabel("Lifetime Gain/Loss: {}".format(self.lifetime_gain))
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
