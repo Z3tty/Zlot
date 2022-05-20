@@ -19,6 +19,9 @@ TABLE_ITEM_HEIGHT: int = 150
 WINDOW_WIDTH: int = 600
 WINDOW_HEIGHT: int = 630
 
+BET_MIN: int = 25
+BET_MAX: int = 50000
+
 # To allow for images in tables
 # Credit: https://www.mail-archive.com/pyqt@riverbankcomputing.com/msg01259.html
 #         https://stackoverflow.com/questions/5553342/adding-images-to-a-qtablewidget-in-pyqt
@@ -129,9 +132,9 @@ class Window(QWidget):
         layout.addWidget(roll_button)
 
         self.bet_slider = QSlider(Qt.Orientation.Horizontal, self)
-        self.bet_slider.setMinimum(25)
-        self.bet_slider.setMaximum(500)
-        self.bet_slider.setTickInterval(25)
+        self.bet_slider.setMinimum(BET_MIN)
+        self.bet_slider.setMaximum(BET_MAX)
+        self.bet_slider.setTickInterval(int(BET_MAX / BET_MIN))
         self.bet_slider.valueChanged.connect(self.update)
         layout.addWidget(self.bet_slider)
         self.bet_label = QLabel("Current bet: {}¤".format(self.bet_slider.value()))
