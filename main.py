@@ -33,6 +33,21 @@ class ImageWidget(QWidget):
         painter.drawPixmap(0, 0, self.picture)
 
 
+def format_number(n: int) -> str:
+    s: str = str(n)
+    l: list = list(s)
+    intermediary_res: list = []
+    index: int = len(l) -1
+    counter: int = 0
+    while (index >= 0):
+        if (counter == 3):
+            counter = 0
+            intermediary_res.insert(0, ',')
+        intermediary_res.insert(0, l[index])
+        index -= 1
+        counter += 1
+    return ''.join(intermediary_res)
+
 class TableWidget(QTableWidget):
     def setImage(self, row, col, imagePath):
         image = ImageWidget(imagePath, self)
@@ -98,12 +113,12 @@ class Window(QWidget):
             for j in range(3):
                 self.table.setImage(i, j, "gfx/question.png")
 
-        self.label = QLabel("Lifetime Gain/Loss: {}¤".format(self.lifetime_gain))
+        self.label = QLabel("Lifetime Gain/Loss: {}¤".format(format_number(self.lifetime_gain)))
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label.adjustSize()
         layout.addWidget(self.label)
 
-        self.balance_label = QLabel("Balance: {}¤".format(self.balance))
+        self.balance_label = QLabel("Balance: {}¤".format(format_number(self.balance)))
         self.balance_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label.adjustSize()
         layout.addWidget(self.balance_label)
@@ -171,16 +186,16 @@ class Window(QWidget):
             self.lifetime_gain += winnings
             self.label.setText(
                 "Result: +{}¤, Lifetime Gain/Loss: {}¤".format(
-                    winnings - bet, self.lifetime_gain
+                    format_number((winnings - bet)), format_number(self.lifetime_gain)
                 )
             )
             self.balance += winnings
-            self.balance_label.setText("Balance: {}¤".format(self.balance))
+            self.balance_label.setText("Balance: {}¤".format(format_number(self.balance)))
         else:
             self.label.setText(
-                "Result: -{}¤, Lifetime Gain/Loss: {}¤".format(bet, self.lifetime_gain)
+                "Result: -{}¤, Lifetime Gain/Loss: {}¤".format(bet, format_number(self.lifetime_gain))
             )
-            self.balance_label.setText("Balance: {}¤".format(self.balance))
+            self.balance_label.setText("Balance: {}¤".format(format_number(self.balance)))
 
 
 def main() -> None:
