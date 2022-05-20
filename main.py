@@ -98,12 +98,12 @@ class Window(QWidget):
             for j in range(3):
                 self.table.setImage(i, j, "gfx/question.png")
 
-        self.label = QLabel("Lifetime Gain/Loss: {}".format(self.lifetime_gain))
+        self.label = QLabel("Lifetime Gain/Loss: {}¤".format(self.lifetime_gain))
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label.adjustSize()
         layout.addWidget(self.label)
 
-        self.balance_label = QLabel("Balance: {}".format(self.balance))
+        self.balance_label = QLabel("Balance: {}¤".format(self.balance))
         self.balance_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label.adjustSize()
         layout.addWidget(self.balance_label)
@@ -119,14 +119,14 @@ class Window(QWidget):
         self.bet_slider.setTickInterval(25)
         self.bet_slider.valueChanged.connect(self.update)
         layout.addWidget(self.bet_slider)
-        self.bet_label = QLabel("Current bet: {}".format(self.bet_slider.value()))
+        self.bet_label = QLabel("Current bet: {}¤".format(self.bet_slider.value()))
         self.bet_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.bet_label.adjustSize()
         layout.addWidget(self.bet_label)
 
     # Just here to update the label that reads your current betting amount
     def update(self):
-        self.bet_label.setText("Current bet: {}".format(self.bet_slider.value()))
+        self.bet_label.setText("Current bet: {}¤".format(self.bet_slider.value()))
         self.bet_label.adjustSize()
 
     # Handles rolling logic for the slot machine itself
@@ -135,11 +135,16 @@ class Window(QWidget):
         self.lifetime_gain -= bet
         self.balance -= bet
         rolls: list = [["", "", ""], ["", "", ""], ["", "", ""]]
+        used: list = []
         for i in range(3):
             for j in range(3):
                 r: str = str(choice(self.slots,  p=[0.4, 0.25, 0.15, 0.07, 0.05, 0.05, 0.03]))
-                rolls[i][j] = r
-                self.table.setImage(i, j, r)
+                while (r in used):
+                    r = str(choice(self.slots,  p=[0.4, 0.25, 0.15, 0.07, 0.05, 0.05, 0.03]))
+                rolls[j][i] = r
+                used.append(r)
+                self.table.setImage(j, i, r)
+            used = []
         winnings: int = 0
         # Handle winning scenarios - three of a kind and x number of consolation prize
         if rolls[1][0] == rolls[1][1] == rolls[1][2]:
@@ -165,17 +170,17 @@ class Window(QWidget):
         if winnings != 0:
             self.lifetime_gain += winnings
             self.label.setText(
-                "Result: +{}, Lifetime Gain/Loss: {}".format(
+                "Result: +{}¤, Lifetime Gain/Loss: {}¤".format(
                     winnings - bet, self.lifetime_gain
                 )
             )
             self.balance += winnings
-            self.balance_label.setText("Balance: {}".format(self.balance))
+            self.balance_label.setText("Balance: {}¤".format(self.balance))
         else:
             self.label.setText(
-                "Result: -{}, Lifetime Gain/Loss: {}".format(bet, self.lifetime_gain)
+                "Result: -{}¤, Lifetime Gain/Loss: {}¤".format(bet, self.lifetime_gain)
             )
-            self.balance_label.setText("Balance: {}".format(self.balance))
+            self.balance_label.setText("Balance: {}¤".format(self.balance))
 
 
 def main() -> None:
